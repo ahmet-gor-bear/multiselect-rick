@@ -4,21 +4,58 @@ import {SearchResultObject} from "../../types/types";
 interface OptionComponentType  {
     item: SearchResultObject;
     searchParam?: string;
+    isSelected:boolean;
+    onSelect?:(item:SearchResultObject)=>void;
 }
-const Option = ({item,searchParam}:OptionComponentType)=>{
+const Option = ({item,searchParam,onSelect,isSelected}:OptionComponentType)=>{
 
     const handleKeyDown =(event:KeyboardEvent<HTMLDivElement>)=>{
+        if (event.code == 'Space'){
+            handleClick();
+            event.preventDefault();
+        }
         if (event.code == 'ArrowDown'){
             const active = document.activeElement;
             if (active?.nextElementSibling) {
                 (active.nextElementSibling as HTMLElement).focus();
             }
+            event.preventDefault();
         }
         if (event.code == 'ArrowUp'){
             const active = document.activeElement;
             if (active?.previousElementSibling) {
                 (active.previousElementSibling as HTMLElement).focus();
             }
+            event.preventDefault();
+        }
+        if (event.code == 'Tab'){
+            const active = document.activeElement;
+            if (active?.nextElementSibling) {
+                (active.nextElementSibling as HTMLElement).focus();
+                event.preventDefault();
+            }else {
+                const active = document.activeElement;
+                if (active?.nextElementSibling) {
+                    (active.nextElementSibling as HTMLElement).focus();
+                    event.preventDefault();
+                }else {
+                    const badges = document.getElementsByClassName('selectedBadge');
+                    if (badges.length > 0 ){
+                        (badges.item(0) as HTMLElement).focus();
+                        event.preventDefault();
+                    }else {
+                        const input = document.getElementById('multiSelectorInput');
+                        if (input){
+                            input.focus();
+                        }
+                        event.preventDefault();
+                    }
+
+                }
+
+            }
+
+
         }
     }
 
@@ -41,11 +78,26 @@ const Option = ({item,searchParam}:OptionComponentType)=>{
         }
     }
 
+    const handleClick = ()=>{
+        if (typeof onSelect == 'function'){
+            onSelect(item);
+        }
+    }
+
     return(
-        <div key={item.id}  className={'singleOptionWrapper'} tabIndex={0} onKeyDown={(e)=>{handleKeyDown(e)}}>
+        <div
+            key={item.id}
+            className={'singleOptionWrapper'}
+            tabIndex={0}
+            onKeyDown={(e)=>{handleKeyDown(e)}}
+            onClick={()=>{handleClick()}}
+        >
+            <div>
+                <input type={'checkbox'} checked={isSelected} readOnly={true}/>
+            </div>
             <img src={item.image} alt={item.name} className={'optionImage'}/>
             <div className={'optionTextWrapper'}>
-                <div className={'optionNameText'}>{handleNameString(item.name)}</div>
+                <div className={'optionNameText'} >{handleNameString(item.name)}</div>
                 <div className={'optionEpisodesText'}>{item.episode.length} Episode{item.episode.length > 1 ?'s':''}</div>
             </div>
         </div>

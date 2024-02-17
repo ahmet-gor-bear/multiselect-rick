@@ -2,44 +2,96 @@ import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {SearchResultObject} from "../types/types";
 import Option from "./multiSelect/Option";
+import loader from '../asset/gif/loading.gif';
+import SelectedBadge from "./multiSelect/SelectedBadge";
 
 
 const MultiSelectRick =()=>{
+    const [focusController,setFocusController] = useState<boolean>(false);
     const [inputValue , setInputValue] = useState<string>('');
-    const [searchResult , setSearchResult] = useState<SearchResultObject[]>([])
+    const [searchResult , setSearchResult] = useState<SearchResultObject[]>([]);
+    const [loading,setLoading] = useState<boolean>(false);
+    const [selectedResults , setSelectedResults] = useState<SearchResultObject[]>([])
 
     const inputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(()=>{
-        if (inputValue && inputValue.length > 2 ){
-            const config = {
-                method: 'get',
-                url: 'https://rickandmortyapi.com/api/character/?name='+inputValue,
-                headers: { }
-            };
+    const selectToggle = (item:SearchResultObject)=>{
+        setSelectedResults((prev :SearchResultObject[]) =>{
+            let isRemoved :boolean = false;
+            const newSelects = prev.filter((value)=>{
+                if (value.id == item.id){
+                    isRemoved=true
+                }
+                return value.id != item.id;
+            })
 
-            axios.request(config)
-                .then((response) => {
-                    setSearchResult(response.data.results);
-                })
-                .catch((error) => {
-                    setSearchResult([]);
-                });
+            if (!isRemoved){
+                newSelects.push(item);
+            }
+            return newSelects;
+        })
+    }
+
+    useEffect(()=>{
+        const search = ()=> {
+            if (inputValue && inputValue.length > 2) {
+
+                const config = {
+                    method: 'get',
+                    url: 'https://rickandmortyapi.com/api/character/?name=' + inputValue,
+                    headers: {}
+                };
+                setLoading(true);
+                axios.request(config)
+                    .then((response) => {
+                        setSearchResult(response.data.results);
+                        setLoading(false);
+                    })
+                    .catch(() => {
+                        setSearchResult([]);
+                        setLoading(false);
+                    });
+
+            } else {
+                setSearchResult([]);
+            }
+        }
+
+        if (inputValue && inputValue.length > 2){
+            setLoading(true);
         }else {
             setSearchResult([]);
+            setLoading(false);
         }
+
+        const debounce = setTimeout(search,400);
+
+        return ()=>{clearTimeout(debounce)}
     },[inputValue])
+
     return (
         <div className={'multiSelectContainer'}>
         <div
             className={'multiSelectHolder'}
-            onClick={()=>{
+            tabIndex={1}
+            onClick={(e)=>{
                 inputRef.current && inputRef.current.focus();
+                e.stopPropagation()
             }}>
             <div
+                className={'selectedBadgeWrapper'}
                 onClick={(e)=>{
                     e.stopPropagation();
                 }}>
+                {selectedResults.map((item:SearchResultObject)=>{
+                    return (
+                        <SelectedBadge
+                            key={item.id}
+                            item={item}
+                            onSelect={(item)=>{selectToggle(item)}}
+                        />
+                    )
+                })}
             </div>
 
             <input
@@ -47,17 +99,49 @@ const MultiSelectRick =()=>{
                 ref={inputRef}
                 type={'text'}
                 className={'multiSelectInput'}
-                onKeyDown={(e)=>{}}
+                id={'multiSelectorInput'}
+                onKeyDown={()=>{}}
+                onFocus={()=>{setFocusController(true)}}
+                onBlur={()=>{
+                    inputValue.length<3 && setFocusController(false);
+                }}
                 value={inputValue}
                 onChange={(e)=>{setInputValue(e.target.value)}}/>
         </div>
-            <div className={'multiSelectOptionHolder'}>
-                {searchResult.map((item)=>{
-                    return (
-                        <Option key={item.id} item={item} searchParam={inputValue}></Option>
-                    )
-                })}
-            </div>
+            {focusController &&
+                <div className={'multiSelectOptionHolder'}>
+                    {
+                        inputValue.length < 3 && searchResult.length==0 &&
+                        <div className={'multiSelectInfo'}>
+                            Type at least 3 character to search
+                        </div>
+                    }
+                    {
+                        loading &&
+                        <div className={'loaderWrapper'}>
+                            <img src={loader} className={'loader'} alt={'loader'}/>
+                        </div>
+                    }
+                    {
+                        !loading && searchResult.length == 0 && inputValue.length > 2 &&
+                        <div className={'multiSelectInfo'}>
+                            No result found in the stack
+                        </div>
+                    }
+                    {searchResult.map((item)=>{
+                        return (
+                            <Option
+                                key={item.id}
+                                item={item}
+                                searchParam={inputValue}
+                                onSelect={(item)=>{selectToggle(item)}}
+                                isSelected={selectedResults.filter((value)=>value.id==item.id).length ==1}
+                            />
+                        )
+                    })}
+                </div>
+            }
+
         </div>
     )
 }
