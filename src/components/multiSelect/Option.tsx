@@ -1,4 +1,4 @@
-import React, {KeyboardEvent} from "react";
+import React, {KeyboardEvent, useState} from "react";
 import {SearchResultObject} from "../../types/types";
 
 interface OptionComponentType  {
@@ -6,8 +6,9 @@ interface OptionComponentType  {
     searchParam?: string;
     isSelected:boolean;
     onSelect?:(item:SearchResultObject)=>void;
+    focusController?:(result:boolean)=>void;
 }
-const Option = ({item,searchParam,onSelect,isSelected}:OptionComponentType)=>{
+const Option = ({item,searchParam,onSelect,isSelected,focusController}:OptionComponentType)=>{
 
     const handleKeyDown =(event:KeyboardEvent<HTMLDivElement>)=>{
         if (event.code == 'Space'){
@@ -91,6 +92,12 @@ const Option = ({item,searchParam,onSelect,isSelected}:OptionComponentType)=>{
             tabIndex={0}
             onKeyDown={(e)=>{handleKeyDown(e)}}
             onClick={()=>{handleClick()}}
+            onFocus={()=>{
+                typeof focusController == 'function' && focusController(true)
+            }}
+            onBlur={()=>{
+                typeof focusController == 'function' && focusController(false)
+            }}
         >
             <div>
                 <input type={'checkbox'} checked={isSelected} readOnly={true}/>

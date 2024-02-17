@@ -12,6 +12,8 @@ const MultiSelectRick =()=>{
     const [searchResult , setSearchResult] = useState<SearchResultObject[]>([]);
     const [loading,setLoading] = useState<boolean>(false);
     const [selectedResults , setSelectedResults] = useState<SearchResultObject[]>([])
+    const [isAnyFocus , setIsAnyFocus] = useState<boolean>(false);
+    const [inputFocus,setInputFocus] = useState<boolean>(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -31,6 +33,12 @@ const MultiSelectRick =()=>{
             return newSelects;
         })
     }
+
+    useEffect(()=>{
+        if (!isAnyFocus && !inputFocus){
+            setFocusController(false);
+        }
+    },[isAnyFocus,inputFocus]);
 
     useEffect(()=>{
         const search = ()=> {
@@ -73,7 +81,6 @@ const MultiSelectRick =()=>{
         <div className={'multiSelectContainer'}>
         <div
             className={'multiSelectHolder'}
-            tabIndex={1}
             onClick={(e)=>{
                 inputRef.current && inputRef.current.focus();
                 e.stopPropagation()
@@ -89,6 +96,10 @@ const MultiSelectRick =()=>{
                             key={item.id}
                             item={item}
                             onSelect={(item)=>{selectToggle(item)}}
+                            focusController={(result)=> {
+                                setFocusController(result)
+                                setIsAnyFocus(result)
+                            }}
                         />
                     )
                 })}
@@ -100,10 +111,17 @@ const MultiSelectRick =()=>{
                 type={'text'}
                 className={'multiSelectInput'}
                 id={'multiSelectorInput'}
-                onKeyDown={()=>{}}
-                onFocus={()=>{setFocusController(true)}}
+                onKeyDown={(e)=>{
+                    if (e.code == 'Tab'){
+
+                    }
+                }}
+                onFocus={()=>{
+                    setFocusController(true)
+                    setInputFocus(true)
+                }}
                 onBlur={()=>{
-                    inputValue.length<3 && setFocusController(false);
+                    setInputFocus(false);
                 }}
                 value={inputValue}
                 onChange={(e)=>{setInputValue(e.target.value)}}/>
@@ -136,6 +154,10 @@ const MultiSelectRick =()=>{
                                 searchParam={inputValue}
                                 onSelect={(item)=>{selectToggle(item)}}
                                 isSelected={selectedResults.filter((value)=>value.id==item.id).length ==1}
+                                focusController={(result)=> {
+                                    setFocusController(result)
+                                    setIsAnyFocus(result)
+                                }}
                             />
                         )
                     })}

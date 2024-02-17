@@ -5,9 +5,10 @@ import {SearchResultObject} from "../../types/types";
 interface SelectedBadgeComponentType  {
     item: SearchResultObject;
     onSelect?:(item:SearchResultObject)=>void;
+    focusController?:(result:boolean)=>void;
 }
 
-const SelectedBadge =({item,onSelect}:SelectedBadgeComponentType)=>{
+const SelectedBadge =({item,onSelect,focusController}:SelectedBadgeComponentType)=>{
 
     const handleKeyDown =(event:KeyboardEvent<HTMLDivElement>)=>{
         if (event.code == 'Space'){
@@ -63,6 +64,8 @@ const SelectedBadge =({item,onSelect}:SelectedBadgeComponentType)=>{
             className={'selectedBadge'}
              tabIndex={0}
              onKeyDown={(e)=>{handleKeyDown(e)}}
+            onFocus={()=>{typeof focusController == 'function' && focusController(true)}}
+            onBlur={()=>{typeof focusController == 'function' && focusController(false)}}
         >
             <div>{item.name}</div>
             <div className={'selectedBadgeClose'} onClick={handleClick}>X</div>
