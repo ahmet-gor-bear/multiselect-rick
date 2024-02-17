@@ -1,38 +1,62 @@
-.App {
-  text-align: center;
+.multiSelectInput{
+    border : none;
+    outline: none;
+    display: flex;
+    flex: 1;
+    font-size: 1.3rem;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.multiSelectContainer{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+.multiSelectOptionHolder{
+    max-height: 30rem;
+    overflow: scroll;
+    border-radius: 1rem;
+    tab-index: 2;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    border: .1rem solid gray;
+    z-index: 9999;
+}
+.singleOptionWrapper{
+    display: flex;
+    flex-direction: row;
+    border-bottom: .1rem solid gray;
+    padding:.5rem;
+    align-items: center;
+}
+.optionImage{
+    width: 3rem;
+    height: 3rem;
+    border-radius: .3rem;
+}
+.optionTextWrapper{
+    margin-left: 1rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.optionNameText{
+
+}
+.optionEpisodesText{
+font-size: .7rem;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.multiSelectHolder{
+    display: flex;
+    border: .1rem solid gray;
+    border-radius: 1rem;
+    flex: 1;
+    flex-direction: row;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    align-items: center;
 }
