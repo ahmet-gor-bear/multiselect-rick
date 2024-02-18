@@ -10,3 +10,17 @@ export interface SearchResultObject {
     url: string;
     created: string;
 }
+
+export interface OptionComponentType  {
+    item: SearchResultObject;
+    searchParam?: string;
+    isSelected:boolean;
+    onSelect?:(item:SearchResultObject)=>void;
+    focusController?:(result:boolean)=>void;
+}
+
+export interface SelectedBadgeComponentType  {
+    item: SearchResultObject;
+    onSelect?:(item:SearchResultObject)=>void;
+    focusController?:(result:boolean)=>void;
+}

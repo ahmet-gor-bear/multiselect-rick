@@ -1,12 +1,8 @@
 import React, {KeyboardEvent} from "react";
-import {SearchResultObject} from "../../types/types";
+import {SelectedBadgeComponentType} from "../../types/types";
 
 
-interface SelectedBadgeComponentType  {
-    item: SearchResultObject;
-    onSelect?:(item:SearchResultObject)=>void;
-    focusController?:(result:boolean)=>void;
-}
+
 
 const SelectedBadge =({item,onSelect,focusController}:SelectedBadgeComponentType)=>{
 

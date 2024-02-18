@@ -114,11 +114,6 @@ const MultiSelectRick =()=>{
                 type={'text'}
                 className={'multiSelectInput'}
                 id={'multiSelectorInput'}
-                onKeyDown={(e)=>{
-                    if (e.code == 'Tab'){
-
-                    }
-                }}
                 onFocus={()=>{
                     setFocusController(true)
                     setInputFocus(true)

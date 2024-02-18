@@ -1,13 +1,7 @@
-import React, {KeyboardEvent, useState} from "react";
-import {SearchResultObject} from "../../types/types";
+import React, {KeyboardEvent} from "react";
+import {OptionComponentType} from "../../types/types";
 
-interface OptionComponentType  {
-    item: SearchResultObject;
-    searchParam?: string;
-    isSelected:boolean;
-    onSelect?:(item:SearchResultObject)=>void;
-    focusController?:(result:boolean)=>void;
-}
+
 const Option = ({item,searchParam,onSelect,isSelected,focusController}:OptionComponentType)=>{
 
     const handleKeyDown =(event:KeyboardEvent<HTMLDivElement>)=>{
