@@ -35,9 +35,13 @@ const MultiSelectRick =()=>{
     }
 
     useEffect(()=>{
-        if (!isAnyFocus && !inputFocus){
-            setFocusController(false);
+        const check = ()=>{
+            if (!isAnyFocus && !inputFocus){
+                setFocusController(false);
+            }
         }
+        const debounce = setTimeout(check,1)
+        return ()=>{clearTimeout(debounce)}
     },[isAnyFocus,inputFocus]);
 
     useEffect(()=>{
@@ -97,7 +101,6 @@ const MultiSelectRick =()=>{
                             item={item}
                             onSelect={(item)=>{selectToggle(item)}}
                             focusController={(result)=> {
-                                setFocusController(result)
                                 setIsAnyFocus(result)
                             }}
                         />
@@ -126,6 +129,7 @@ const MultiSelectRick =()=>{
                 value={inputValue}
                 onChange={(e)=>{setInputValue(e.target.value)}}/>
         </div>
+            <div className={'multiSelectOptionWrapper'}>
             {focusController &&
                 <div className={'multiSelectOptionHolder'}>
                     {
@@ -155,7 +159,6 @@ const MultiSelectRick =()=>{
                                 onSelect={(item)=>{selectToggle(item)}}
                                 isSelected={selectedResults.filter((value)=>value.id==item.id).length ==1}
                                 focusController={(result)=> {
-                                    setFocusController(result)
                                     setIsAnyFocus(result)
                                 }}
                             />
@@ -163,6 +166,7 @@ const MultiSelectRick =()=>{
                     })}
                 </div>
             }
+            </div>
 
         </div>
     )

@@ -21,7 +21,7 @@ const SelectedBadge =({item,onSelect,focusController}:SelectedBadgeComponentType
                     input.focus();
                 }
             }
-            handleClick();
+            handleClick(true);
             event.preventDefault();
         }
         if (event.code == 'ArrowRight'){
@@ -53,7 +53,18 @@ const SelectedBadge =({item,onSelect,focusController}:SelectedBadgeComponentType
         }
     }
 
-    const handleClick = ()=>{
+    const handleClick = (isSpaceClicked:boolean = false)=>{
+        if (!isSpaceClicked){
+            const active = document.activeElement;
+            if (active?.nextElementSibling) {
+                (active.nextElementSibling as HTMLElement).focus();
+            }else {
+                const input = document.getElementById('multiSelectorInput');
+                if (input){
+                    input.focus();
+                }
+            }
+        }
         if (typeof onSelect == 'function'){
             onSelect(item);
         }
@@ -68,7 +79,7 @@ const SelectedBadge =({item,onSelect,focusController}:SelectedBadgeComponentType
             onBlur={()=>{typeof focusController == 'function' && focusController(false)}}
         >
             <div>{item.name}</div>
-            <div className={'selectedBadgeClose'} onClick={handleClick}>X</div>
+            <div className={'selectedBadgeClose'} onClick={()=>{handleClick(false)}}>X</div>
         </div>
     )
 }
