@@ -6,7 +6,7 @@
     flex: 1;
     font-size: 1.5rem;
     padding-left: .3rem;
-    background-color: #f9f9f9;
+    background-color:white;
 }
 
 .multiSelectContainer{
@@ -73,6 +73,7 @@
 .multiSelectHolder{
     display: flex;
     border: .1rem solid #94a3b8;
+    background-color: white;
     border-radius: 1rem;
     flex: 1;
     flex-direction: row;
