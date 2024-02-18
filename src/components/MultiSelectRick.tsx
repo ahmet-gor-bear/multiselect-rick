@@ -109,6 +109,7 @@ const MultiSelectRick =()=>{
             </div>
 
             <input
+                placeholder={'Search Characters'}
                 tabIndex={0}
                 ref={inputRef}
                 type={'text'}
@@ -123,6 +124,7 @@ const MultiSelectRick =()=>{
                 }}
                 value={inputValue}
                 onChange={(e)=>{setInputValue(e.target.value)}}/>
+            <div className="arrow-down"></div>
         </div>
             <div className={'multiSelectOptionWrapper'}>
             {focusController &&

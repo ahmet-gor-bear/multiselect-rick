@@ -65,6 +65,7 @@
     color: #475569;
 }
 .optionEpisodesText{
+    text-align: left;
     font-size: .7rem;
     color: #94a3b8;
 }
@@ -146,4 +147,12 @@ align-items: center;
 
 .box-content {
     text-align: center;
+}
+
+.arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #475569;
 }
